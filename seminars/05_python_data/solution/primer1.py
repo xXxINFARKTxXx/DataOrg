@@ -2,7 +2,7 @@
 
 IN_FILE = "in.txt"
 
-print("Karakter po karakter:")
+print("Character by character:")
 with open(IN_FILE) as f:
     while True:
         c = f.read(1)
@@ -10,7 +10,7 @@ with open(IN_FILE) as f:
             break
         print(c)
 
-print("\nRed po red:")
+print("\nLine by line:")
 with open(IN_FILE) as f:
     while True:
         l = f.readline()
@@ -18,12 +18,12 @@ with open(IN_FILE) as f:
             break
         print(l)
 
-print("\nSve odjednom:")
+print("\nAll at once:")
 with open(IN_FILE) as f:
     content = f.read()
     print(content)
 
-# ispis redova obrnuto u novu datoteku
+# Outputting lines in reverse order to a new file
 with open(IN_FILE) as fin, open("outr.txt", "w") as fout:
     lines = fin.readlines()
     for line in lines[::-1]:
@@ -32,12 +32,10 @@ with open(IN_FILE) as fin, open("outr.txt", "w") as fout:
         else:
             fout.write(line + "\n")
 
-# ispis karaktera ornuto u novu datoteku
+# Outputting characters in reverse order to a new file
 with open(IN_FILE) as fin, open("outc.txt", "w") as fout:
     content = fin.read()
     fout.write(content[::-1])
 
 if __name__ == '__main__':
     pass
-
-

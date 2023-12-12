@@ -1,63 +1,48 @@
-def read_by_chars(file_name: str) -> None:
-    with open(file_name, mode='r') as file:
-        while True:
-            char = file.read(1)
-            if not char:
-                break
-            print(char, end='', sep='')
-    return
+def readfile(filename: str) -> str:
+    with open(filename, mode='r', encoding='utf') as f:
+        return f.read().replace('\n', '')
 
 
-def read_by_lines(file_name: str) -> None:
-    with open(file_name, mode='r') as file:
-        for line in file:
-            line = file.readline()
-            if not line:
-                break
-            print(line, end='', sep='')
-    return
+def count_chars(string: str) -> int:
+    return len(string)
 
 
-def read_file(file_name: str) -> str:
-    with open(file_name, mode='r') as file:
-        text = file.read()
-        print(text)
-        return text
+def count_numbers(string: str) -> int:
+    letter_count = 0
+    for char in string:
+        if char.isdigit():
+            letter_count += 1
+    return letter_count
 
 
-def reverse_file_lines(filename_in: str, filename_out: str) -> None:
-    with open(filename_in, mode='r') as file_in:
-        lines_arr = file_in.readlines()
-        lines_arr[-1] = lines_arr[-1] + "\n"
-
-    with open(filename_out, mode='w') as file_out:
-        for line in lines_arr[::-1]:
-            file_out.write(line)
-    return
+def count_letters(string: str) -> int:
+    letter_count = 0
+    for char in string:
+        if char.isalpha():
+            letter_count += 1
+    return letter_count
 
 
-def reverse_file(filename_in: str, filename_out: str) -> None:
-    with open(filename_in) as file_in:
-        text = file_in.read()
+def count_words(string: str) -> int:
+    return len(string.split())
 
-    text = text[::-1]
 
-    with open(filename_out, mode='w') as file_out:
-        file_out.write(text)
-    return
+def count_sentences(string: str) -> int:
+    sentence_endings = {'.', '!', '?'}
+    sentence_count = 0
+    for char in string:
+        if char in sentence_endings:
+            sentence_count += 1
+    return sentence_count
 
 
 if __name__ == '__main__':
-    print("orig:")
-    read_file('in.txt')
-    print()
+    text = readfile('in_primer1.txt')
 
-    print("reversed file:")
-    reverse_file('in.txt', 'out.txt')
-    read_file('out.txt')
-    print()
+    print("text:", text)
+    print("chars:", count_chars(text))
+    print("letters:", count_letters(text))
+    print("numbers:", count_numbers(text))
 
-    print("reversed lines:")
-    reverse_file_lines('in.txt', 'out.txt')
-    read_file('out.txt')
-    print()
+    print("words:", count_words(text))
+    print("sentences:", count_sentences(text))
