@@ -1,103 +1,99 @@
- ## Fakultet tehničkih nauka, DRA, Novi Sad
+## Факультет технических наук, ДРА, Нови Сад
 
-## Predmet:
+## Предмет:
 
-## Organizacija podataka
+## Организация данных
 
-##### dr Vladimir Ivančević
+##### д-р Владимир Иванчевич
 
-##### Nikola Todorović
+##### Никола Тодорович
 
-##### Vladimir Jovanović
-
-
-# Serijska organizacija datoteka
+##### Владимир Йованович
 
 
-# Serijska datoteka
-
-## • Osnovna struktura
-
-- slogovi smešteni jedan za drugim
-    - u sukcesivne memorijske lokacije
-- fizička struktura ne sadrži informacije o
-
-#### vezama između slogova logičke strukture
-
-#### datoteke
-
-- ne postoji veza između vrednosti ključa sloga
-
-#### i adrese lokacije u koju je smešten
+# Серийная организация файлов
 
 
-# Serijska datoteka
+# Серийный файл
 
-## • Osnovna struktura
+## • Основная структура
 
-- redosled memorisanja slogova najčešće
+- записи расположены одна за другой
+    - в последовательные места в памяти
+- физическая структура не содержит информации о
 
-#### prema hronološkom redosledu njihovog
+#### связях между записями логической структуры файла
 
-#### nastanka
+- нет связи между значением ключа записи
 
-- slogovi mogu, a i ne moraju, biti blokirani
-
-
-# Serijska datoteka
-
-## • Primer serijske
-
-## datoteke
+#### и адресом места, где она находится
 
 
-# Zadatak 1
+# Серийный файл
 
-- Napisati C/C++ program koji će omogućiti rad sa
+## • Основная структура
 
-### podacima o evidentiranim prispećima zatvorenika
+- порядок сохранения записей обычно
 
-### u Gradski zatvor. Za svaki dolazak novog
+#### следует хронологическому порядку их
 
-### zatvorenika u neblokiranoj serijskoj datoteci
+#### создания
 
-### beleži se:
-
-- evidencioni broj (do 8 cifara)
-- šifra zatvorenika (tačno 7 karaktera)
-- datum i vreme dolaska
-- oznaka ćelije u koju će zatvorenik biti smešten (tačno 5
-    karaktera)
-- dužina kazne u mesecima (do 480 meseci)
+- записи могут быть, а могут и не быть блокированными
 
 
-# Zadatak 1
+# Серийный файл
 
-- Omogućiti
-    - odabir datoteke
-    - formiranje datoteke
-    - pretragu datoteke
-    - unos novog sloga
-    - ispis svih slogova
-    - ažuriranje sloga
-       - direktna obrada serijske datoteke
-    - brisanje sloga
-       - Logičko brisanje
+## • Пример серийного
+
+## файла
 
 
-# Zadatak 2
+# Задание 1
 
-## • Implementirati fizičko brisanje nad
+- Написать программу на C/C++, позволяющую работать с
 
-## prethodnom datotekom
+### данными о зарегистрированных поступлениях заключенных
+
+### в городскую тюрьму. Для каждого поступления нового
+
+### заключенного в неблокированном серийном файле
+
+### регистрируется:
+
+- номер учета (до 8 цифр)
+- код заключенного (ровно 7 символов)
+- дата и время прибытия
+- обозначение ячейки, в которую заключенный будет помещен (ровно 5
+    символов)
+- продолжительность наказания в месяцах (до 480 месяцев)
 
 
-# Zadatak 3
+# Задание 1
 
-## • Implementirati blokiranu serijsku datoteku
+- Обеспечить
+    - выбор файла
+    - формирование файла
+    - поиск по файлу
+    - ввод новой записи
+    - вывод всех записей
+    - обновление записи
+       - прямая обработка серийного файла
+    - удаление записи
+       - Логическое удаление
 
-## nad istim slogom.
 
-- Sa svim operacijama
+# Задание 2
+
+## • Реализовать физическое удаление для
+
+## предыдущего файла
 
 
+# Задание 3
+
+## • Реализовать заблокированный серийный файл
+
+## для той же записи.
+
+- Со всеми операциями

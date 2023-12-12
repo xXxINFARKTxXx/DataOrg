@@ -1,166 +1,156 @@
- ### Fakultet tehničkih nauka, DRA, Novi Sad
+### Факультет технических наук, ДРА, Нови Сад
 
-### Predmet:
+### Предмет:
 
-### Organizacija podataka
+### Организация данных
 
 ```
-Dr Vladimir Ivančević
-Nikola Todorović
-Vladimir Jovanović
+Др Владимир Иванчевич
+Никола Тодорович
+Владимир Йованович
 ```
 
-# Biblioteka Struct u programskom
+# Библиотека Struct в языке программирования Python
 
-# jeziku Python
+## СТРУКТУРИРОВАННЫЕ БИНАРНЫЕ
 
-
-## STRUKTURIRANE BINARNE
-
-## DATOTEKE
+## ФАЙЛЫ
 
 
-# struct tip u programskom jeziku C
+# Тип struct в языке программирования C
 
-● Strukture (slogovi) u programskom jeziku C
-predstavljaju složeni, korisnički definisan tip
-podataka
-● Komponente (polja) strukture su imenovana i
-mogu biti različitog tipa
-● Primer definisanja strukture:
+● Структуры (записи) в языке программирования C
+представляют собой сложные пользовательские типы
+данных
+● Компоненты (поля) структуры именованы и
+могут иметь разные типы
+● Пример определения структуры:
 struct student {
 char index[12];
-char ime[16];
-char prezime[16];
-int godinaStudija;
+char name[16];
+char surname[16];
+int studyYear;
 };
 
 
-# Modul struct
+# Модуль struct
 
-● Modul _struct_ omogućava konverziju između
-Pajton objekata i C struktura koje su
-predstavljene kao _bytes_ objekti
-● Koriste se formatni stringovi za opis načina
-pakovanja/raspakivanja vrednosti
-promenljivih (polja strutkure) u bajtove
-● Koristeći _struct_ modul ,moguće je binarnu
-datoteku kreirati u Pajtonu, a čitati u C-u i
-obrnuto
-
-
-# Modul struct
-
-● Glavne funkcije _struct_ modula su:
-
-- _struct.pack(format, v1, v2, ...)_ koristi se za
-    pakovanje vrednosti promeljivih v1, v2, ... na
-    način specificiran formatnim stringom u niz
-    bajtova
-- _struct.unpack(format, buffer)_ vraća torku ( _tuple_ )
-    dobijenu raspakivanjem promenljive _buffer_
-- _struct.calcsize(format)_ određuje veličinu
-    strukture (u bajtovima) opisane formatnim
-    stringom
+● Модуль _struct_ обеспечивает конвертацию между
+объектами Python и структурами C, представленными в
+виде объектов _bytes_
+● Для описания способа упаковки/распаковки значений
+переменных (полей структуры) в байты используются
+строки формата
+● Используя модуль _struct_, можно создавать бинарные
+файлы в Python и читать их в C, и наоборот
 
 
-# Formatni string
+# Модуль struct
 
-● Formatnim stringom se specificira na koji način
-će vrednosti promenljivih biti
-spakovane/raspakovane u/iz niza bajtova
-● Primer formatnog string:
+● Основные функции модуля _struct_:
+
+- _struct.pack(format, v1, v2, ...)_ используется для
+    упаковки значений переменных v1, v2, ... в байты
+    с использованием заданного строки формата
+- _struct.unpack(format, buffer)_ возвращает кортеж
+    (_tuple_), полученный распаковкой буфера buffer
+- _struct.calcsize(format)_ определяет размер
+    структуры (в байтах), описанной строкой формата
+
+
+# Строка формата
+
+● Строка формата указывает, как значения переменных
+будут упакованы/распакованы в/из массива байтов
+● Пример строки формата:
 
 - pack('hhl', 1, 2, 3)
 - pack('ci', b'*', 0x12131415)
 - pack('i7s', 1234, b"test")
 - calcsize('ci')
-● Kada formatni string specificira čuvanje string
-vrednosti, mora se eksplicitno naglasiti
-maksimalni broj karaktera u stringu
-- Zbog načina na koji se stringovi čuvaju u C-u, ovu
-vrednost bi uvek trebalo dodatno **uvećati za 1**
-- Prostor za karakter _\ 0_
+● Когда строка формата указывает на сохранение
+строкового значения, необходимо явно указать
+максимальное количество символов в строке
+- Из-за того, как строки хранятся в C, это значение
+всегда должно быть **увеличено на 1**
+- Пространство для символа _\0_ (нулевой символ)
 
 
-# Formatni string
+# Строка формата
 
-Format C Type Python type Standard size
-x pad byte no value
-c char bytes of length 1 1
-b signed char integer 1
-? _Bool bool 1
-h short integer 2
-i int integer 4
-l long integer 4
-q long long integer 8
-f float float 4
-d double float 8
-s char[] bytes
-p char[] bytes
-
-
-# Primer 1
-
-● Zadatu CSV datoteku pročitati i njen sadržaj
-smestiti u binarnu datoteku
-
-- slogovi bi trebalo da odgovaraju redovima ulazne
-    datoteke
-● Kolone iz CSV datoteke:
-- Username
-- Identifier
-- First name
-- Last name
+Формат C Тип Python Тип Стандартный размер
+x пустой байт без значения
+c char байты длиной 1 1
+b signed char целое число 1
+? _Bool логическое значение 1
+h short целое число 2
+i int целое число 4
+l long целое число 4
+q long long целое число 8
+f float число с плавающей точкой 4
+d double число с плавающей точкой 8
+s char[] байты
+p char[] байты
 
 
-# Primer 2
+# Пример 1
 
-● Binarnu datoteku, formiranu u prethodnom
-primeru, pročitati i ispisati sadržaj 2. i 5. sloga
+● Прочитать заданный CSV-файл и сохранить его
+содержимое в бинарный файл
+
+- записи должны соответствовать строкам входного
+    файла CSV
+● Колонки из CSV-файла:
+- Имя пользователя
+- Идентификатор
+- Имя
+- Фамилия
 
 
-# Zadatak 1
+# Пример 2
 
-● Niz 2D tačaka dat je u ulaznoj tekstualnoj
-datoteci:
+● Прочитать бинарный файл, созданный в предыдущем
+примере, и вывести содержимое 2-ой и 5-ой записей
+
+
+# Задача 1
+
+● Массив 2D точек задан во входном текстовом файле:
 1.23 -6.
 12.45 -0.
 34.55 82.
-● Učitati dati niz i njegov sadržaj sačuvati u
-izlaznu binarnu datoteku, s tim što bi na
-početku datoteke trebalo da se nađe i
-zaglavlje sa dve celobrojne vrednosti:
+● Загрузить данный массив и сохранить его содержимое в
+выходной бинарный файл, при этом в начале файла должен
+быть заголовок с двумя целочисленными значениями:
 
-- broj tačaka,
-- dimenzionalnost tačaka (u ovom slučaju 2)
-
-
-# Zadatak 2
-
-● Binarnu datoteku kreiranu u prethodnom
-zadatku učitati koristeći podatke iz zaglavlja
-tj. bez prethodnog znanja o broj tačaka i
-njihovoj dimenzionalnosti
-● Izračunati težište (centroid) niza tačaka
-● Izmeniti Zadatak 1 tako da radi sa nizom 3D
-tačaka, pa testirati rešenje Zadatka 2 sa
-novom binarnom datotekom
+- количество точек,
+- размерность точек (в данном случае 2)
 
 
-# Zadatak 3
+# Задача 2
 
-● Pročitati sadržaj binarne datoteke
-_username.bin_ na sledeći način:
+● Загрузить бинарный файл, созданный в предыдущей
+задаче, используя данные из заголовка, то есть без
+предварительного знания о количестве точек и их
+размерности
+● Вычислить центр масс (центроид) массива точек
+● Изменить Задачу 1 так, чтобы она работала с массивом 3D
+точек, и затем протестировать решение Задачи 2 с
+новым бинарным файлом
 
-- Smatrati da je datoteka podeljena u blokove, s
-    faktorom blokiranja 3
-- Pročitati drugi blok, (koji čine poslednja 3 sloga)
-- Iz pročitanog bloka izdvojiti podatke o slogovima,
-    dekodirati ih, i prikazati na ekranu
-- Očekivani ispis programa:
+
+# Задача 3
+
+● Прочитать содержимое бинарного файла
+_username.bin_ следующим образом:
+
+- Считать, что файл разделен на блоки с фактором
+    блокировки 3
+- Прочитать второй блок (который состоит из последних
+    3 записей)
+- Извлечь данные о записях из прочитанного блока,
+    декодировать их и вывести на экран
+- Ожидаемый вывод программы:
     ['jenkins46', 9346, 'Mary', 'Jenkins']
     ['smith79', 5079, 'Jamie', 'Smith']
     ['vlad58', 5858, 'Vlad', 'Nevski']
-
-
