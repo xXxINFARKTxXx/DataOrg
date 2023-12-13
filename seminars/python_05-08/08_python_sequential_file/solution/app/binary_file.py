@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import struct
-from app.record import Record
+from record import Record
 from typing import BinaryIO, List, Dict
 
 

@@ -2,7 +2,7 @@
 
 import os
 
-from app.binary_file import BinaryFile
+from binary_file import BinaryFile
 
 
 class SerialFile(BinaryFile):
