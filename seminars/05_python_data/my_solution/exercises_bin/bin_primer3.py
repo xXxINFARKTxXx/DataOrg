@@ -53,8 +53,8 @@ def main(file1: str, file2: str, ascii_str: str, not_ascii_str: str) -> None:
 
 
 if __name__ == '__main__':
-    filename1: str = "data/bin1_primer3.bin"
-    filename2: str = "data/bin2_primer3.bin"
+    filename1: str = "data/bin1_primer3_out.bin"
+    filename2: str = "data/bin2_primer3_out.bin"
     string_ascii: str = "The quick brown fox jumps over the ASCII."
     string_not_ascii: str = "Быстрая коричневая лиса прыгнула через АСКДОИ."
     main(filename1, filename2, string_ascii, string_not_ascii)

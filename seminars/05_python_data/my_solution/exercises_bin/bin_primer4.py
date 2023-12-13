@@ -7,7 +7,7 @@ dogs_dict = {'Ozzy': 3, 'Filou': 8, 'Luna': 5,
              'Skippy': 10, 'Barco': 12, 'Balou': 9, 'Laika': 16}
 
 # Specify the filename for storing the dictionary in binary format
-filename = 'data/dogs.bin'
+filename = 'data/dogs_out.bin'
 
 # Serialize and write the dictionary to a binary file
 with open(filename, 'wb') as outfile:

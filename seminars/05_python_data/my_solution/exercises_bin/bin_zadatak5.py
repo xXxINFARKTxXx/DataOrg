@@ -16,6 +16,6 @@ def complement_and_write(input_file, output_header_file, output_complement_file)
 
 
 if __name__ == '__main__':
-    complement_and_write("data/input.bmp",
+    complement_and_write("data/in_zadatak5.bmp",
                          "data/header_output.txt",
                          "data/complement_output.txt")
