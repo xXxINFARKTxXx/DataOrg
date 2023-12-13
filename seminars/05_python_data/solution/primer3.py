@@ -1,17 +1,18 @@
 #!/usr/bin/python
 
-S = "Neki string"
+S = "Some string"
 
 with open("p3_out.bin", "wb") as f:
-    # prilikom pretvaranja stringa u niz bajtova
-    # neophodno je proslediti naziv kodnog standarda
+    # When converting a string to a byte array,
+    # it's necessary to provide the character encoding
     f.write(S.encode("ASCII"))
 
 with open("p3_out.bin", "rb") as f1, open("p3_out2.bin", "wb") as f2:
+    # Read the content and decode it from ASCII, then add some Unicode characters
     p = f1.read()
-    p = p.decode("ascii") + " \u0416 \u0402 \u015A"
+    p = p.decode("ascii") + " Ж Ђ Ś"
 
-    # drugi nacin pretvaranja stringa u bytes
+    # Another way to convert a string to bytes
     f2.write(bytes(p, "utf8"))
 
 with open("p3_out2.bin", "rb") as f:

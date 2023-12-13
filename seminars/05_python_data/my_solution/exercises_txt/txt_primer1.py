@@ -49,15 +49,15 @@ def reverse_file(filename_in: str, filename_out: str) -> None:
 
 if __name__ == '__main__':
     print("orig:")
-    read_file('in_primer1.txt')
+    read_file('data/in_primer1.txt')
     print()
 
     print("reversed file:")
-    reverse_file('in_primer1.txt', 'out1_primer1.txt')
-    read_file('out1_primer1.txt')
+    reverse_file('data/in_primer1.txt', 'data/out1_primer1.txt')
+    read_file('data/out1_primer1.txt')
     print()
 
     print("reversed lines:")
-    reverse_file_lines('in_primer1.txt', 'out2_primer1.txt')
-    read_file('out2_primer1.txt')
+    reverse_file_lines('data/in_primer1.txt', 'data/out2_primer1.txt')
+    read_file('data/out2_primer1.txt')
     print()

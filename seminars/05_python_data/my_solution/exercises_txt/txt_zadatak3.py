@@ -9,7 +9,7 @@ def main():
         print("Value Error!")
         return -1
 
-    with open("out_zadatak3.txt", "w") as f:
+    with open("data/out_zadatak3.txt", "w") as f:
         line = ''
 
         for i in range(0, n):
@@ -22,4 +22,4 @@ def main():
 
 
 if __name__ == "__main__":
-    print("Program finished with return code", main())
+    main()

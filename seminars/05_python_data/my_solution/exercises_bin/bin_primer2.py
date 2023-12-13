@@ -61,7 +61,7 @@ if __name__ == "__main__":
     n: int = (pow(2, 28 * 8) - 1) // 2
     byteorder: str = "big"
     signed: bool = False
-    file1: str = "bin_primer1.txt"
-    file2: str = "bin_primer2.txt"
+    file1: str = "data/bin_primer1.txt"
+    file2: str = "data/bin_primer2.txt"
     rc = main(file1, file2, n, byteorder, signed=signed)
     print("Program finished with return code", rc)

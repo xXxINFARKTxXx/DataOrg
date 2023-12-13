@@ -15,7 +15,7 @@ def readfile(filename: str) -> list:
 
 
 def main() -> int:
-    autos = [Auto(line) for line in readfile("in_zadatak2.txt")]
+    autos = [Auto(line) for line in readfile("data/in_zadatak2.txt")]
 
     try:
         max_volume: float = float(input("Enter engine max volume: "))
@@ -37,4 +37,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    print("Program finished with return code", main())
+    main()

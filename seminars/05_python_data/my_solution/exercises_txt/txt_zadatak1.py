@@ -37,7 +37,7 @@ def count_sentences(string: str) -> int:
 
 
 if __name__ == '__main__':
-    text = readfile('in_primer1.txt')
+    text = readfile('data/in_primer1.txt')
 
     print("text:", text)
     print("chars:", count_chars(text))
