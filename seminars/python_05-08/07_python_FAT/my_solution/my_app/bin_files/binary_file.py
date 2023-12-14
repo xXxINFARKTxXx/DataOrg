@@ -23,7 +23,7 @@ class BinaryFile:
             self._len_of_file = 0
             self._write_header()
         except Exception as e:
-            raise IOError(f"ввода-вывода при открытии файла: {e.args}")
+            raise IOError(f"Ошибка ввода-вывода при открытии файла: {e.args}")
 
         try:
             self._file.seek(0, os.SEEK_SET)
@@ -33,19 +33,20 @@ class BinaryFile:
         except IOError:
             raise IOError("Ошибка ввода-вывода при открытии файла")
 
-        self._restore_file()
+        self.__restore_file()
 
-    def next_block(self, backwards: bool = False, step_size: int = 1):
-        self._next_block(backwards=backwards, step_size=step_size)
+    def _next_block(self, backwards: bool = False, step_size: int = 1):
+        self.__next_block(backwards=backwards, step_size=step_size)
 
-    def read_block(self) -> list[tuple]:
+    def _read_block(self) -> list[tuple]:
         recs = []
         decoded_recs = []
         for i in range(self._block_size):
             if not self._is_rec_empty():
                 recs.append(self._read_rec())
-            else: self._next_rec()
-        self._next_block(backwards=True)
+            else:
+                self._next_rec()
+        self.__next_block(backwards=True)
         for rec in recs:
             decoded_recs.append(
                 tuple([field.decode('ascii').strip('\0x00')
@@ -53,32 +54,32 @@ class BinaryFile:
                        for field in rec]))
         return decoded_recs
 
-    def write_block(self, block: list[tuple]):
+    def _write_block(self, block: list[tuple]):
         for rec in block:
             self._write_rec(rec)
 
         self._file.write(bytes([0] * ((self._block_size - len(block)) * (self._rec_size + 1))))
         self._set_eof_pos()
         self._count_records()
-        self._next_block(backwards=True)
+        self.__next_block(backwards=True)
 
-    def is_eof(self) -> bool:
+    def _is_eof(self) -> bool:
         self._set_eof_pos()
         return self._file.tell() >= self._end_pos
 
-    def if_block_has_empty_rec(self) -> int:
+    def _if_block_has_empty_rec(self) -> int:
         for i in range(self._block_size):
             if self._is_rec_empty():
                 self._restore_block()
                 return i
             self._next_rec()
-        self._next_block(backwards=True)
+        self.__next_block(backwards=True)
         return -1
 
-    def insert_record(self, rec: tuple, rec_index: int = None) -> bool:
+    def _insert_record(self, rec: tuple, rec_index: int = None) -> bool:
         self._restore_block()
         if rec_index is None:
-            rec_index = self.if_block_has_empty_rec()
+            rec_index = self._if_block_has_empty_rec()
             if rec_index < 0:
                 self._restore_block()
                 return False
@@ -88,21 +89,35 @@ class BinaryFile:
         self._restore_block()
         return True
 
-    def restore_file(self):
-        self._restore_file()
+    def _restore_file(self):
+        self.__restore_file()
 
     def _is_rec_empty(self) -> bool:
         res = self._file.read(1)
         self._restore_rec()
         return res == b'\0'
 
-    def is_block_empty(self) -> bool:
+    def _mark_as_deleted(self, rec_index: int):
+        self._restore_block()
+        for i in range(rec_index):
+            self._next_rec()
+        self._file.write(b'\0')
+        self._restore_block()
+
+    def _delete_by_index(self, rec_index: int):
+        self._restore_block()
+        for i in range(rec_index):
+            self._next_rec()
+        self._write_rec(tuple([0, 0, "".encode('ascii'), "".encode("ascii")]), save=False)
+        self._restore_block()
+
+    def _is_block_empty(self) -> bool:
         counter = self._block_size
         for i in range(self._block_size):
             counter -= 1 if not self._is_rec_empty() else 0
             self._next_rec()
         self._restore_block()
-        if counter == 0: self._next_block(backwards=True)
+        if counter == 0: self.__next_block(backwards=True)
         return not counter
 
     def _set_eof_pos(self) -> None:
@@ -115,24 +130,25 @@ class BinaryFile:
     def _next_rec(self, backwards=False, step_size: int = 1) -> None:
         self._file.seek((self._rec_size + 1) * (-1 if backwards else 1) * step_size, os.SEEK_CUR)
 
-    def _next_block(self, backwards=False, step_size: int = 1) -> None:
+    def __next_block(self, backwards=False, step_size: int = 1) -> None:
         self._file.seek((self._rec_size + 1) * self._block_size * (-1 if backwards else 1) * step_size, os.SEEK_CUR)
 
     def _restore_rec(self) -> None:
         self._file.seek(-1 * ((self._file.tell() - self._header_size) % (self._rec_size + 1)), os.SEEK_CUR)
 
     def _restore_block(self) -> None:
-        self._file.seek(-1 * ((self._file.tell() - self._header_size) % (self._block_size * (self._rec_size + 1))), os.SEEK_CUR)
+        self._file.seek(-1 * ((self._file.tell() - self._header_size) % (self._block_size * (self._rec_size + 1))),
+                        os.SEEK_CUR)
 
-    def _restore_file(self) -> None:
+    def __restore_file(self) -> None:
         self._file.seek(self._header_size, os.SEEK_SET)
 
     def _read_rec(self) -> tuple:
         return struct.unpack(self._rec_fmt, bytes(bytearray(self._file.read(self._rec_size + 1)[1:])))
 
-    def _write_rec(self, enc_rec: tuple):
+    def _write_rec(self, enc_rec: tuple, save=True):
         enc_rec = tuple([elem.encode() if isinstance(elem, str) else elem for elem in enc_rec])
-        dump_rec = bytes([1]) + struct.pack(self._rec_fmt, *enc_rec)
+        dump_rec = bytes([save]) + struct.pack(self._rec_fmt, *enc_rec)
         self._file.write(dump_rec)
 
     def _read_header(self) -> tuple:
