@@ -5,7 +5,7 @@ if __name__ == '__main__':
     rec_fmt = "ii12s11s"
     dbf_filenames = ["data/data.myDBF", 'data/data2.myDBF']
     csv_filenames = ["data/data.csv", "data/data2.csv"]
-    dbfiles = [SerialBlockFile(filename, header_fmt=header_fmt, block_factor=2, rec_fmt=rec_fmt) for filename in
+    dbfiles = [SerialBlockFile(filename, header_fmt=header_fmt, block_factor=4, rec_fmt=rec_fmt) for filename in
                dbf_filenames]
 
     for i in range(len(dbfiles)):
