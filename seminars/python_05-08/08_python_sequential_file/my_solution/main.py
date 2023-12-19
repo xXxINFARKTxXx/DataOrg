@@ -5,6 +5,7 @@ if __name__ == "__main__":
     csv_f = "./data/data.csv"
     block_size = 4
     encoding = 'ascii'
-    fmt: str = "ii7s12s5s"
+    fmt: str = "i7s12s5si"
     file = SequentialFile(bin_f, block_size, encoding, fmt)
     file.load_from_csv(csv_f)
+    file.

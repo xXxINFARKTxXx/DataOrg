@@ -1,111 +1,106 @@
 import csv
-import os
 import struct
 from typing import BinaryIO
 
+from app.my_binary import BinaryFile
 
-class SequentialFile():
-    def __init__(
-            self,
-            filename,
-            blocking_factor,
-            encoding,
-            fmt: str
-    ):
 
-        self.filename = filename
-        self.blocking_factor = blocking_factor
-        self.encoding = encoding
-        self.fmt = format
-
-        self.file: BinaryIO = None
+class SequentialFile(BinaryFile):
+    def __init__(self, filename: str, blocking_factor: int, encoding: str, fmt: str):
+        self.__filename = filename
+        self.__blocking_factor = blocking_factor
+        self.__is_initialized = False
+        file: BinaryIO = None
 
         try:
-            self.rec_size = struct.calcsize(self.fmt)
+            struct.calcsize(fmt)
         except Exception as e:
             raise ValueError("Invalid format") from e
 
         try:
-            self.file = open(filename, mode='rb+')
-        except Exception as e:
-            self.file = open(filename, mode='wb+')
-            self.init_file()
+            file = open(filename, mode='rb+')
+            self.__is_initialized = True
+        except IOError as e:
+            file = open(filename, mode='wb+')
         except Exception as e:
             raise IOError(f"Could not open or create file: {e.args}")
-
-    def init_file(self):
-        empt_block = bytes([0] * ((self.rec_size) * self.block_size))
-        self.file.write(empt_block)
+        finally:
+            super().__init__(file, encoding=encoding, fmt=fmt, block_factor=blocking_factor)
+            if not self.__is_initialized:
+                self._init_file()
+                self.__is_initialized = True
+            self._restore()
 
     def load_from_csv(self, csv_file: str):
-        with open(csv_file, mode='r') as file:
-            reader = csv.reader(file, delimiter=',')
+        with open(csv_file, 'r') as f:
+            reader = csv.reader(f)
+            next(reader)
             for row in reader:
-                rec = Record(row, coding='ascii', format=self.fmt)
-                print(Record)
+                print(row)
+                if not row: continue
+                record = tuple([
+                    int(row[0]), row[1], row[2],
+                    row[3], int(row[4])
+                ])
+                self.add_record(record)
 
     def find_record_by_key(self, key: int) -> tuple:
-        self._restore()
-        while not self._eof():
-            block = self.read_block(self.file)
-            if block:
-                for i in block:
-                    if block[0] == key:
-                        return i
-        return tuple()
+        res = self._find_record_by_key(key, equal=True)
+        return res[0] if res else None
 
     def add_record(self, record):
+
+        self._strip()
         pass
 
     def delete_record_by_key(self, key):
-        pass
+        not_exists = self._find_record_by_key(key, equal=False, more=False)
+        if not_exists:
+            return False
 
-    def update_record(self, record, key: int) -> None:
+        index = not_exists[1]
+        self._next_block(backwards=True)
+        block = self._read_block()
+        block.pop(index)
+        while not self._is_eof():
+            block += self._read_block()
+            self._next_block(backwards=True)
+            self._next_block(backwards=True)
+            self._write_block(block[:3])
+            block = block[3:]
+            self._next_block()
+
+        self._next_block(backwards=True)
+        block.append(self._bbuilder.get_empty_record())
+        self._write_block(block)
+        self._strip()
+        return True
+
+    def update_record(self, new_rec, key: int) -> bool:
+        not_exists = self._find_record_by_key(key, equal=True, more=False)
+        if not_exists:
+            return False
+        index = not_exists[1]
+
+        self._next_block(backwards=True)
+        block: list[tuple] = self._read_block()
+        self._next_block(backwards=True)
+        block[index] = new_rec
+        self._write_block(block)
+        return True
+
+    def _find_record_by_key(self, key: int, equal=True, more=False) -> tuple:
         self._restore()
-        block = self.read_block(self.file)
-        pass
+        while not self._is_eof():
+            block: list[tuple] = self._read_block()
+            for i in range(len(block)):
+                rec = block[i]
+                if rec[0] == key and equal or \
+                        rec[0] < key and not more or \
+                        rec[0] > key and more:
+                    return tuple([rec, i])
+        return tuple()
 
-    def reorg_file(self):
-        pass
-
-    def _restore(self):
-        self.file.seek(0, os.SEEK_SET)
-
-    def _next_block(self, backwards=False):
-        self.file.seek((int(backwards) * (-2) + 1) * self.blocking_factor, os.SEEK_CUR)
-
-    def _is_block_empty(self, ):
-        pass
-
-    def _eof(self):
-        curr_pos = self.file.tell()
-        self.file.seek(0, os.SEEK_END)
-        end_pos = self.file.tell()
-        self.file.seek(curr_pos, os.SEEK_SET)
-        return end_pos <= curr_pos
-
-    def write_block(self, file: BinaryIO, block: List[Dict]):
-        binary_data = bytearray()
-
-        for rec in block:
-            rec_binary_data = self.record.dict_to_encoded_values(rec)
-            binary_data.extend(rec_binary_data)
-
-        file.write(binary_data)
-
-    def read_block(self, file: BinaryIO):
-        binary_data = file.read(self.block_size)
-        block = []
-
-        if len(binary_data) == 0:
-            return block
-
-        for i in range(self.blocking_factor):
-            begin = self.record_size * i
-            end = self.record_size * (i + 1)
-            block.append(self.record.encoded_tuple_to_dict(binary_data[begin:end]))
-
-        return block
     def __del__(self):
         if self.file is not None and not self.file.closed:
             self.file.close()
