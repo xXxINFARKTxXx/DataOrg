@@ -8,4 +8,5 @@ if __name__ == "__main__":
     fmt: str = "i7s12s5si"
     file = SequentialFile(bin_f, block_size, encoding, fmt)
     file.load_from_csv(csv_f)
-    file.
+    file.find_record_by_key(13)
+

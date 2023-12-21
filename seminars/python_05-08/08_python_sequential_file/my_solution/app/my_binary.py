@@ -46,3 +46,6 @@ class BinaryFile:
         end_pos = self.__file.tell()
         self.__file.seek(curr_pos, os.SEEK_SET)
         return end_pos <= curr_pos
+
+    def _set_to_index(self, index: int) -> None:
+        self.__file.seek(index * self._bbuilder.get_block_size(), os.SEEK_SET)
